@@ -1,0 +1,18 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:${PORTAINER_VERSION:-lts}
+    container_name: portainer
+    restart: unless-stopped
+    command: -H unix:///var/run/docker.sock
+    ports:
+      - "${PORTAINER_HTTPS_PORT:-9443}:9443"   # Web-UI (HTTPS)
+      - "${PORTAINER_EDGE_PORT:-8000}:8000"    # Edge-Agent-Tunnel (optional)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  portainer_data:
+    name: portainer_data
